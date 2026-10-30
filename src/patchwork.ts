@@ -172,8 +172,9 @@ export async function listPatchwork(
     const rows: Patch[] = [];
     const seen = new Set<number>();
     let next: string | undefined;
+    // Keep the page size constant: page numbers are offsets in units of per_page.
+    const perPage = Math.min(needed, 250);
     for (let page = 1; page <= 100 && rows.length < needed; page++) {
-      const perPage = Math.min(needed - rows.length, 250);
       const query = new URLSearchParams({
         order: "-id",
         per_page: String(perPage),

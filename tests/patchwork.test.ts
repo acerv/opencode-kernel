@@ -223,3 +223,25 @@ test("Patchwork command distinguishes numeric lists from patch IDs", () => {
     all: true,
   });
 });
+
+test("Patchwork pages keep a constant page size", async () => {
+  const seen: URL[] = [];
+  const fetcher = (async (raw) => {
+    const url = new URL(String(raw));
+    seen.push(url);
+    const size = Number(url.searchParams.get("per_page"));
+    const start = (Number(url.searchParams.get("page")) - 1) * size;
+    return Response.json(
+      Array.from({ length: size }, (_, i) => ({
+        id: start + i + 1,
+        name: `Patch ${start + i}`,
+      })),
+    );
+  }) as typeof fetch;
+  const result = await listPatchwork({ limit: 300 }, { fetch: fetcher });
+  assert.match(result, /\(300\)/);
+  assert.deepEqual(
+    seen.map((url) => url.searchParams.get("per_page")),
+    ["250", "250"],
+  );
+});
