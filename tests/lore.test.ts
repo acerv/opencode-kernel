@@ -209,3 +209,10 @@ test("Lore command treats a leading number as a count", () => {
     limit: 20,
   });
 });
+
+test("explicit list commands accept queries containing @", () => {
+  assert.deepEqual(patchCommand("lore", "list netdev a@b.org"), {
+    tool: "lore_list_patches",
+    input: { list: "netdev", query: "a@b.org" },
+  });
+});

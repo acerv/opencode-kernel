@@ -63,9 +63,10 @@ export function patchCommand(
     return { tool: `${kind}_read_patch`, input: { target: rest.join(" ") } };
   }
   if (
-    /^https?:\/\//.test(args) ||
-    args.includes("@") ||
-    (kind === "patchwork" && /^\d+$/.test(args))
+    first !== "list" &&
+    (/^https?:\/\//.test(args) ||
+      args.includes("@") ||
+      (kind === "patchwork" && /^\d+$/.test(args)))
   ) {
     return { tool: `${kind}_read_patch`, input: { target: args } };
   }
