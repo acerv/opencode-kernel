@@ -267,3 +267,17 @@ test("syz aliases share explicit read and list routing", () => {
     "syzkaller_read_report",
   );
 });
+
+test("crash parser strips console timestamps and caller IDs", () => {
+  const parsed = parseCrash(
+    "[   12.345678][ T5012] BUG: KASAN: use-after-free in foo\n" +
+      "[   12.345679][ T5012] Call Trace:\n" +
+      "[   12.345680][ T5012]  foo+0x10/0x20 fs/foo.c:12\n" +
+      "[   12.345681][    C0]  bar+0x1/0x2 fs/bar.c:3\n",
+  );
+  assert.deepEqual(
+    parsed.crash.map((frame) => frame.func),
+    ["foo", "bar"],
+  );
+  assert.equal(parsed.fault?.file, "fs/foo.c");
+});

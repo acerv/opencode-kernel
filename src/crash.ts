@@ -47,10 +47,13 @@ export function classify(title: string, text = ""): string {
   );
 }
 
+// Console prefixes: timestamp and/or caller ID, e.g. "[  12.3][ T123]".
+const prefix = /^[ \t]*(?:\[\s*\d+\.\d+\])?(?:\[\s*[TC]\d+\])?[ \t]*/;
+
 export function frames(raw: string): Frame[] {
   const output: Frame[] = [];
   for (const line of raw.split("\n")) {
-    const clean = line.replace(/^\s*\[\s*\d+\.\d+\]\s*/, "").trim();
+    const clean = line.replace(prefix, "").trim();
     const match = clean.match(
       /^(?:\[\s*<[\da-fx]+>\s*\]\s*)?(?:\?\s+)?([\w.]+)(?:\+0x([\da-f]+)\/0x([\da-f]+))?(?:\s+([\w./-]+):(\d+))?(\s+\[inline\])?/i,
     );
@@ -75,7 +78,10 @@ export function effectiveFrame(trace: Frame[]): Frame | undefined {
 }
 
 export function parseCrash(raw: string) {
-  const text = raw.replace(/^\s*\[\s*\d+\.\d+\]\s*/gm, "");
+  const text = raw
+    .split("\n")
+    .map((line) => line.replace(prefix, ""))
+    .join("\n");
   const title =
     text
       .match(
