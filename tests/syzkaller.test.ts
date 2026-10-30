@@ -281,3 +281,7 @@ test("crash parser strips console timestamps and caller IDs", () => {
   );
   assert.equal(parsed.fault?.file, "fs/foo.c");
 });
+
+test("syz read requires a target", () => {
+  assert.throws(() => syzCommand("read"), /required/);
+});

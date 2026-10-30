@@ -376,6 +376,8 @@ export async function readSyz(
 export function syzCommand(raw: string): CommandRequest | undefined {
   const args = raw.trim();
   if (args === "help") return;
+  if (args === "read")
+    throw new Error("A syzbot URL, ID, file, or directory is required");
   if (/^read\s+/.test(args))
     return {
       tool: "syzkaller_read_report",
