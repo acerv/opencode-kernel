@@ -285,3 +285,21 @@ test("crash parser strips console timestamps and caller IDs", () => {
 test("syz read requires a target", () => {
   assert.throws(() => syzCommand("read"), /required/);
 });
+
+test("relative paths in a symlinked working directory stay internal", async () => {
+  const base = await mkdtemp(path.join(os.tmpdir(), "ok-cwd-"));
+  try {
+    await mkdir(path.join(base, "real"));
+    await writeFile(path.join(base, "real", "crash.log"), "x");
+    await symlink(path.join(base, "real"), path.join(base, "link"));
+    const actions: string[] = [];
+    await localPath("crash.log", path.join(base, "link"), {
+      authorize: async (action) => {
+        actions.push(action);
+      },
+    });
+    assert.deepEqual(actions, ["read"]);
+  } finally {
+    await rm(base, { recursive: true, force: true });
+  }
+});

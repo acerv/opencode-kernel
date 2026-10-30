@@ -31,8 +31,8 @@ export async function localPath(
   const expanded = raw.startsWith("~/")
     ? path.join(os.homedir(), raw.slice(2))
     : raw;
-  const target = path.resolve(cwd, expanded);
   const root = await realpath(cwd);
+  const target = path.resolve(root, expanded);
   const authorize = async (file: string) => {
     if (!within(root, file))
       await io.authorize?.("external_directory", [
