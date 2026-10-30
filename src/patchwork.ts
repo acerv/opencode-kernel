@@ -69,7 +69,7 @@ export async function listPatchwork(input: z.infer<typeof patchworkListSchema>, 
   const project = resolveProject(input.subsystem || input.project);
   const all = input.all || input.limit === "all" || (typeof input.limit === "number" && input.limit <= 0);
   const recent = !all && input.limit === undefined;
-  const count = Math.min(typeof input.limit === "number" && input.limit > 0 ? input.limit : 1000, 1000);
+  const count = all ? 1000 : Math.min(typeof input.limit === "number" && input.limit > 0 ? input.limit : 1000, 1000);
   let source = "";
   async function batches(since: boolean, needed: number): Promise<Patch[]> {
     const rows: Patch[] = [];

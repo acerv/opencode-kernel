@@ -59,6 +59,13 @@ test("Lore empty recent results fall back and repeated pages stop", async () => 
   assert.equal(calls, 2);
 });
 
+test("Lore all overrides a simultaneous numeric count", async () => {
+  const output = await listLore({ all: true, limit: 1 }, {
+    fetch: async () => new Response(`<feed>${entry(1)}${entry(2)}</feed>`),
+  });
+  assert.match(output, /\(2\)/);
+});
+
 test("mail parser handles multipart boundaries and encoded headers", () => {
   const mail = parseMbox(fixture);
   assert.equal(mail.length, 4);

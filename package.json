@@ -4,6 +4,9 @@
   "private": true,
   "description": "Kernel development tools for OpenCode 2",
   "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "license": "MIT",
   "author": "Andrea Cervesato <andrea.cervesato@mailbox.org>",
   "scripts": {

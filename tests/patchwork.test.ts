@@ -60,6 +60,13 @@ test("empty recent lists fall back without masking network errors", async () => 
   await assert.rejects(listPatchwork({}, { fetch: async () => Response.json({ unexpected: true }) }));
 });
 
+test("Patchwork all overrides a simultaneous numeric count", async () => {
+  const output = await listPatchwork({ all: true, limit: 1 }, {
+    fetch: async () => Response.json(fixture.patches),
+  });
+  assert.match(output, /\(2\)/);
+});
+
 test("a patch resolves its full series, cover, diffs, and reviews", async () => {
   const output = await readPatchwork({ target: "10" }, { fetch: fixtureFetch() });
   for (const value of ["Cover motivation", "First motivation", "Second motivation", "Reviewed-by:", "+first"]) {

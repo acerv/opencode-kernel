@@ -156,3 +156,7 @@ OpenCode 1 plugins use a different API and are not supported here.
 The package does not upgrade OpenCode.
 Configured local plugins must name the package directory, not `server.js`.
 OpenCode loads `server.js`, which imports the compiled plugin in `dist/`.
+
+See [compatibility and limits](docs/compatibility.md) for permission
+behavior and differences from Pi. See the [test guide](docs/testing.md)
+for offline, native-runtime, and optional live tests.

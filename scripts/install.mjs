@@ -101,7 +101,7 @@ async function readState(configDir) {
   await plainDirectory(path.join(configDir, state.backup));
   for (const item of state.displaced) {
     inside(configDir, item.path);
-    if (!/^(?:plugins?|commands?)\//.test(item.path) || item.path === managed || !/^\d+$/.test(item.backup)) {
+    if (!/^(?:plugins?|commands?)\/[^/\\]+$/.test(item.path) || item.path === managed || !/^\d+$/.test(item.backup)) {
       throw new Error("Invalid displaced path in installer state");
     }
   }

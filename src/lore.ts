@@ -66,7 +66,7 @@ export async function listLore(input: z.infer<typeof loreListSchema>, io: IO = {
   const name = resolveList(input.list);
   const all = input.all || input.limit === "all" || (typeof input.limit === "number" && input.limit <= 0);
   const recent = !all && input.limit === undefined;
-  const count = Math.min(typeof input.limit === "number" && input.limit > 0 ? input.limit : 1000, 1000);
+  const count = all ? 1000 : Math.min(typeof input.limit === "number" && input.limit > 0 ? input.limit : 1000, 1000);
   const clauses = [input.onlyOriginalSubmissions !== false ? "s:PATCH AND NOT s:Re:" : "",
     input.query ? `(${input.query})` : ""].filter(Boolean);
   const query = [...clauses, ...(recent ? [`d:${yesterday(true)}..`] : [])].join(" AND ");
