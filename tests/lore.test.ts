@@ -233,3 +233,10 @@ test("mail parser handles MIME parts without headers", () => {
   );
   assert.equal(mail.body, "first\n\nsecond");
 });
+
+test("Atom parser tolerates malformed link encoding", () => {
+  const [item] = parseAtom(
+    '<feed><entry><title>t</title><link href="https://lore.kernel.org/all/a%E0%A4%A@b/"/></entry></feed>',
+  );
+  assert.equal(item.msgId, "a%E0%A4%A@b");
+});

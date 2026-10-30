@@ -106,6 +106,14 @@ export interface ListItem {
   snippet: string;
 }
 
+function safeDecode(value: string): string {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
 export function parseAtom(xml: string): ListItem[] {
   if (!/<feed\b/.test(xml))
     throw new Error(
@@ -128,7 +136,7 @@ export function parseAtom(xml: string): ListItem[] {
         author: value("name"),
         date: value("updated"),
         url,
-        msgId: decodeURIComponent(url.split("/").filter(Boolean).at(-1) ?? ""),
+        msgId: safeDecode(url.split("/").filter(Boolean).at(-1) ?? ""),
         snippet: value("content")
           .replace(/<[^>]+>/g, " ")
           .replace(/\s+/g, " ")
