@@ -24,8 +24,26 @@ The smoke test needs OpenCode 2.1.2 on `PATH`. It uses a temporary home
 and configuration directory. It does not call a model or load your
 personal configuration.
 
+## Lore
+
+The tools `lore_list_patches` and `lore_read_patch` fetch submissions and
+threads. Results include cover letters, diffs, and review comments.
+
+```text
+/lore list netdev
+/lore list bpf 20 tcp
+/lore list mm all
+/lore read <message-id-or-url>
+```
+
+The default date range is today and yesterday in UTC. An explicit count
+or `all` removes that date filter. Lists stop at 1000 items.
+Empty recent lists fall back to up to 20 recent submissions.
+
 ## Compatibility
 
 This package uses `@opencode/plugin` 2.1.2 and its Promise API.
 OpenCode 1 plugins use a different API and are not supported here.
 The package does not upgrade OpenCode.
+Configured local plugins must name the package directory, not `server.js`.
+OpenCode loads `server.js`, which imports the compiled plugin in `dist/`.
