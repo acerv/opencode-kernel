@@ -202,3 +202,10 @@ test("Lore command routes aliases, defaults, explicit counts, and targets", () =
   );
   assert.throws(() => patchCommand("lore", "read"), /required/);
 });
+
+test("Lore command treats a leading number as a count", () => {
+  assert.deepEqual(patchCommand("lore", "list 20")?.input, {
+    list: "all",
+    limit: 20,
+  });
+});

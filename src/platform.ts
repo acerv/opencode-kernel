@@ -70,10 +70,9 @@ export function patchCommand(
     return { tool: `${kind}_read_patch`, input: { target: args } };
   }
   const tokens = first === "list" ? rest : [first, ...rest];
-  const list =
-    kind === "patchwork" && /^\d+$/.test(tokens[0] ?? "")
-      ? "all"
-      : (tokens.shift() ?? "all");
+  const list = /^\d+$/.test(tokens[0] ?? "")
+    ? "all"
+    : (tokens.shift() ?? "all");
   const input: Record<string, unknown> = {
     [kind === "lore" ? "list" : "subsystem"]: list,
   };
