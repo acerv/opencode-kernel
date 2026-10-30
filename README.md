@@ -61,6 +61,37 @@ Series over 100 patches fail explicitly. Comment retrieval stops after
 HTTP failures for comments appear as retrieval warnings.
 Permission rejections and cancellation always stop the operation.
 
+## Syzkaller
+
+The tools `syzkaller_list_bugs` and `syzkaller_read_report` retrieve bugs,
+crash reports, and reproducers. `/syz` and `/syzkaller` share one parser.
+
+```text
+/syz
+/syz usb all
+/syz usb 20
+/syz 8420e667af06b1709c00
+/syz read ./crashes/sample
+/syzkaller read ./crash.log
+```
+
+The default list contains bugs active within 48 hours.
+An empty recent list falls back to up to 10 matching open bugs.
+A command count selects all dates. A tool call can combine a count with
+`timeframe: "recent"`.
+
+Run OpenCode from the kernel checkout for local source correlation.
+The report tool reads crash, allocation, and free sites from that working
+directory. It reports missing files and Git history without inventing a
+match. Source paths from reports cannot escape the checkout.
+User-selected external reports require native directory and read approval.
+
+Set `checkLocalSource: false` to disable local source access.
+Set `fetchReproducer: false` to skip linked and companion reproducers.
+An explicit reproducer target still reads that target.
+Reproducers are never executed. Displays stop at 180 lines and mark
+omissions. Root-cause analysis and fix suggestions remain model-driven.
+
 ## Compatibility
 
 This package uses `@opencode/plugin` 2.1.2 and its Promise API.

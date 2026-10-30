@@ -21,7 +21,11 @@ test("registers native tools and commands and releases registrations", async () 
     location: { directory: "/tmp" },
   } as unknown as Plugin.Context;
   const cleanup = await plugin.setup(context);
-  assert(tools.some((t) => t.name === "lore_list_patches"));
+  assert.deepEqual(tools.map((t) => t.name).sort(), [
+    "lore_list_patches", "lore_read_patch", "patchwork_fetch_series",
+    "patchwork_list_patches", "patchwork_read_patch", "syzkaller_list_bugs", "syzkaller_read_report",
+  ]);
+  assert.deepEqual(commands.map((c) => c.name).sort(), ["lore", "patchwork", "syz", "syzkaller"]);
   await commands.find((c) => c.name === "lore").execute({
     sessionID: "test", prompt: { text: "list bpf 20" }, delivery: "queue",
   });

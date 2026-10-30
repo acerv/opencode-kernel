@@ -1,0 +1,25 @@
+HEAD commit: abcdef012345
+ git tree: upstream
+BUG: KASAN: slab-use-after-free in consume_buffer
+Read of size 8 at addr ffff888000000010 by task syz-executor/123
+CPU: 0 PID: 123 Comm: syz-executor Not tainted
+Hardware name: Test machine
+Workqueue: events cleanup
+Call Trace:
+ dump_stack+0x1/0x2 lib/dump_stack.c:1
+ kasan_report+0x1/0x2 mm/kasan/report.c:1
+ consume_buffer+0x10/0x20 drivers/sample.c:3
+ helper drivers/sample.c:2 [inline]
+
+Allocated by task 120:
+ allocate_buffer+0x1/0x2 drivers/sample.c:2
+
+Freed by task 121:
+ free_buffer+0x1/0x2 drivers/sample.c:4
+
+The buggy address belongs to the object at ffff888000000000
+ which belongs to the cache kmalloc-64 of size 64
+The buggy address is located 16 bytes inside of
+ freed 64-byte region [ffff888000000000, ffff888000000040)
+RAX: 0000000000000001 RBX: 0000000000000002
+Code: 48 8b 00
