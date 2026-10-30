@@ -1,0 +1,23 @@
+{
+  "name": "opencode-kernel",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Kernel development tools for OpenCode 2",
+  "type": "module",
+  "license": "MIT",
+  "author": "Andrea Cervesato <andrea.cervesato@mailbox.org>",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "check": "npm run typecheck && npm test && npm run build"
+  },
+  "dependencies": {
+    "@opencode/plugin": "2.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.15",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  }
+}
