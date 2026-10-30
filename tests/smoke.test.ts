@@ -67,7 +67,9 @@ test("OpenCode 2 loads the built plugin in isolation", {
     }
     if (process.env.OPENCODE_SMOKE_DEBUG) console.error(logs, plugins?.data?.filter((p: any) => p.source.type !== "builtin"), commands);
     assert.equal(plugins?.data?.find((p: any) => p.id === "opencode-kernel")?.state.status, "active", JSON.stringify(plugins) + logs);
-    assert(commands?.data?.some((c: any) => c.name === "lore"), JSON.stringify(commands));
+    for (const name of ["lore", "patchwork"]) {
+      assert(commands?.data?.some((c: any) => c.name === name), JSON.stringify(commands));
+    }
   } finally {
     if (server && server.exitCode === null) {
       const closed = once(server, "close");

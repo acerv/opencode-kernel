@@ -40,6 +40,27 @@ The default date range is today and yesterday in UTC. An explicit count
 or `all` removes that date filter. Lists stop at 1000 items.
 Empty recent lists fall back to up to 20 recent submissions.
 
+## Patchwork
+
+The tools `patchwork_list_patches`, `patchwork_read_patch`, and
+`patchwork_fetch_series` use the Patchwork 1.3 API.
+The two read tools have the same behavior. Both accept `target` or `url`.
+
+```text
+/patchwork list ltp
+/patchwork list netdev 30 tcp
+/patchwork read <patch-id-or-url>
+/patchwork read <message-id>
+```
+
+Lists use patchwork.kernel.org and the same date defaults as Lore.
+Read URLs can select another HTTPS Patchwork instance.
+A patch resolves to its full series, including the cover and reviews.
+Series over 100 patches fail explicitly. Comment retrieval stops after
+10 pages and reports omissions. Each diff includes up to 150 lines.
+HTTP failures for comments appear as retrieval warnings.
+Permission rejections and cancellation always stop the operation.
+
 ## Compatibility
 
 This package uses `@opencode/plugin` 2.1.2 and its Promise API.
