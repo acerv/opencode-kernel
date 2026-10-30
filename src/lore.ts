@@ -252,7 +252,7 @@ function headersAndBody(raw: string): {
   headers: Record<string, string>;
   body: string;
 } {
-  const match = /\r?\n\r?\n/.exec(raw);
+  const match = /^\r?\n|\r?\n\r?\n/.exec(raw);
   if (!match) throw new Error("Malformed mail: missing header/body separator");
   const headers: Record<string, string> = {};
   for (const line of raw
@@ -325,7 +325,7 @@ export function parseMbox(mbox: string): Mail[] {
     .split(/\r?\n(?=From \S+[^\r\n]*\r?\n)/)
     .filter((item) => item.trim());
   const parsed = messages.map((raw) => {
-    const { headers, body } = headersAndBody(raw);
+    const { headers, body } = headersAndBody(raw.replace(/^\s+/, ""));
     if (!headers.subject || !headers["message-id"])
       throw new Error("Malformed mail: missing Subject or Message-ID");
     return {

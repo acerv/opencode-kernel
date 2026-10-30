@@ -224,3 +224,12 @@ test("quoted-printable decoding keeps literal UTF-8 text", () => {
   );
   assert.equal(mail.body, "caf\u00e9 na\u00efve");
 });
+
+test("mail parser handles MIME parts without headers", () => {
+  const [mail] = parseMbox(
+    "From x\nSubject: s\nMessage-ID: <a@b>\n" +
+      'Content-Type: multipart/mixed; boundary="b"\n\n--b\n\n' +
+      "first\n\nsecond\n--b--\n",
+  );
+  assert.equal(mail.body, "first\n\nsecond");
+});
