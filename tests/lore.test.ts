@@ -240,3 +240,16 @@ test("Atom parser tolerates malformed link encoding", () => {
   );
   assert.equal(item.msgId, "a%E0%A4%A@b");
 });
+
+test("Lore cap note appears only at the 1000 result cap", async () => {
+  const io = {
+    fetch: (async (url) => {
+      const offset = Number(new URL(String(url)).searchParams.get("o"));
+      return new Response(
+        `<feed>${Array.from({ length: 200 }, (_, i) => entry(offset + i)).join("")}</feed>`,
+      );
+    }) as typeof fetch,
+  };
+  assert.doesNotMatch(await listLore({ limit: 900 }, io), /capped/);
+  assert.match(await listLore({ limit: 1000 }, io), /capped/);
+});

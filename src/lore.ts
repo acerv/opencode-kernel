@@ -202,9 +202,9 @@ export async function listLore(
     note =
       "No submissions from today or yesterday. Showing up to 20 recent submissions instead.";
   }
+  items = items.slice(0, count);
   if (items.length >= 1000)
     note = "Results capped at 1000. Narrow the query for more detail.";
-  items = items.slice(0, count);
   return [
     `# Lore Patches: ${name} (${items.length})`,
     `Source: ${source}`,
