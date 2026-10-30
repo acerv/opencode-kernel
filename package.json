@@ -8,12 +8,15 @@
   "author": "Andrea Cervesato <andrea.cervesato@mailbox.org>",
   "scripts": {
     "build": "tsc",
+    "setup": "node scripts/install.mjs",
+    "uninstall": "node scripts/install.mjs --uninstall",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "check": "npm run typecheck && npm test && npm run build"
   },
   "dependencies": {
     "@opencode/plugin": "2.1.2",
+    "jsonc-parser": "3.3.1",
     "zod": "4.6.7"
   },
   "devDependencies": {

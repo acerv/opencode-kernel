@@ -10,6 +10,63 @@ The original MIT license and copyright apply.
 The package excludes Pi themes, workflow rules, status displays, and
 companion packages. It does not migrate credentials.
 
+## Install globally
+
+Use Linux, Node.js 22 or later, npm, and OpenCode 2.1.2.
+
+```sh
+cd ~/Projects/opencode-kernel
+npm ci --ignore-scripts
+npm run check
+npm run setup
+npm run setup -- --apply
+```
+
+The first setup command is a dry run. Installation creates a managed
+symlink at `~/.config/opencode/plugins/opencode-kernel`.
+The link points to this checkout, so keep the checkout in place.
+The installer never edits your JSON/JSONC configuration or credentials.
+Restart OpenCode after installation.
+
+If setup reports conflicting plugin or command files, inspect them first.
+Then approve backup and replacement explicitly:
+
+```sh
+npm run setup -- --replace-conflicts
+npm run setup -- --replace-conflicts --apply
+```
+
+Conflicts in explicit JSON/JSONC plugin or command entries require manual
+resolution. The installer reports these entries and stops without edits.
+It does not inspect arbitrary plugin dependency graphs for hidden conflicts.
+
+The directory defaults to `OPENCODE_CONFIG_DIR`, if set. Otherwise it uses
+`$XDG_CONFIG_HOME/opencode` or `~/.config/opencode`.
+Use `--config-dir PATH` to select another directory.
+
+After source changes, rebuild with `npm run check` and restart OpenCode.
+Repeating installation does not replace an existing managed link.
+
+## Remove or recover
+
+```sh
+npm run uninstall
+npm run uninstall -- --apply
+```
+
+Removal deletes only the owned link and restores displaced files.
+It refuses changed links or occupied restore paths. Your unrelated
+configuration remains untouched, including changes made after installation.
+
+The installer stores its journal in `.opencode-kernel-install.json` inside
+the configuration directory. Displaced files stay in a private directory
+named `.opencode-kernel-backup-*`. Empty backup directories remain after
+removal or rollback.
+
+Caught installation failures restore displaced files. A process crash can
+leave an incomplete journal or lock file. Preserve the journal and backups
+for manual recovery. Do not rerun installation over an incomplete state.
+
 ## Development
 
 Use Node.js 22 or later and npm.

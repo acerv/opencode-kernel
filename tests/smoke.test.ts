@@ -9,6 +9,7 @@ import path from "node:path";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
+import { applyPlan, planInstall } from "../scripts/install.mjs";
 
 const exec = promisify(execFile);
 
@@ -21,9 +22,8 @@ test("OpenCode 2 loads the built plugin in isolation", {
   try {
     const config = path.join(root, "config", "opencode");
     await mkdir(config, { recursive: true });
-    await writeFile(path.join(config, "opencode.json"), JSON.stringify({
-      plugins: [fileURLToPath(new URL("../", import.meta.url))],
-    }));
+    await writeFile(path.join(config, "opencode.json"), "{}\n");
+    await applyPlan(await planInstall({ configDir: config, root: fileURLToPath(new URL("../", import.meta.url)) }));
     const env = {
       PATH: process.env.PATH,
       HOME: root,
@@ -37,7 +37,7 @@ test("OpenCode 2 loads the built plugin in isolation", {
     const configuration = await exec("opencode", ["api", "--standalone", "config.get"], {
       cwd: root, env, timeout: 45000, maxBuffer: 2 * 1024 * 1024,
     });
-    assert.match(configuration.stdout, /"plugins"/);
+    assert(configuration.stdout.includes(config));
     if (process.env.OPENCODE_SMOKE_DEBUG) console.error(configuration.stdout);
     const socket = createServer().listen(0, "127.0.0.1");
     await once(socket, "listening");
