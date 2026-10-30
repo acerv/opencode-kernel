@@ -214,11 +214,15 @@ export async function listLore(
 }
 
 function decodeBytes(value: string, charset = "utf-8"): string {
-  const bytes = Buffer.from(
-    value.replace(/=([\da-f]{2})/gi, (_, hex) =>
-      String.fromCharCode(parseInt(hex, 16)),
-    ),
-    "latin1",
+  // Keep literal non-ASCII text intact; only =XX escapes become raw bytes.
+  const bytes = Buffer.concat(
+    value
+      .split(/(=[\da-f]{2})/i)
+      .map((part) =>
+        /^=[\da-f]{2}$/i.test(part)
+          ? Buffer.from([parseInt(part.slice(1), 16)])
+          : Buffer.from(part, "utf8"),
+      ),
   );
   try {
     return new TextDecoder(charset).decode(bytes);

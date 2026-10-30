@@ -216,3 +216,11 @@ test("explicit list commands accept queries containing @", () => {
     input: { list: "netdev", query: "a@b.org" },
   });
 });
+
+test("quoted-printable decoding keeps literal UTF-8 text", () => {
+  const [mail] = parseMbox(
+    "From x\nSubject: s\nMessage-ID: <a@b>\n" +
+      "Content-Transfer-Encoding: quoted-printable\n\ncaf=C3=A9 na\u00efve\n",
+  );
+  assert.equal(mail.body, "caf\u00e9 na\u00efve");
+});
