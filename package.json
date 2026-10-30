@@ -15,7 +15,9 @@
     "uninstall": "node scripts/install.mjs --uninstall",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
-    "check": "npm run typecheck && npm test && npm run build"
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run format:check && npm run typecheck && npm test && npm run build"
   },
   "dependencies": {
     "@opencode/plugin": "2.1.2",
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "@types/node": "22.19.15",
+    "prettier": "3.9.10",
     "tsx": "4.23.15",
     "typescript": "5.9.3"
   }

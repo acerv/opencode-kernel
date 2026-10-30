@@ -1,0 +1,10 @@
+# Keep generated files, dependencies, and parser fixtures unchanged.
+node_modules/
+dist/
+coverage/
+package-lock.json
+tests/fixtures/
+
+# This formatter configuration covers code, not documentation.
+**/*.md
+LICENSE

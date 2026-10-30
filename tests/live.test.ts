@@ -1,3 +1,9 @@
+/*
+ * SPDX-License-Identifier: MIT
+ *
+ * Run opt-in retrieval tests against live Lore, Patchwork, and syzbot services.
+ */
+
 import assert from "node:assert/strict";
 import test from "node:test";
 import { listLore, readLore } from "../src/lore.js";
@@ -12,7 +18,10 @@ test("live Lore list and thread", options, async (t) => {
   assert.match(list, /# Lore Patches: netdev \(1\)/);
   const target = list.match(/Message-ID: (.+)/)?.[1];
   assert(target);
-  assert.match(await readLore({ target }, io), /Patches: \d+; review comments:/);
+  assert.match(
+    await readLore({ target }, io),
+    /Patches: \d+; review comments:/,
+  );
 });
 
 test("live Patchwork list and series", options, async (t) => {
@@ -28,7 +37,16 @@ test("live Syzbot list and report", options, async (t) => {
   const io = { signal: t.signal };
   const list = await listSyz({ timeframe: "all", limit: 1 }, io);
   assert.match(list, /1 shown;/);
-  const target = list.match(/\]\((https:\/\/syzkaller\.appspot\.com\/bug\?[^)]+)\)/)?.[1];
+  const target = list.match(
+    /\]\((https:\/\/syzkaller\.appspot\.com\/bug\?[^)]+)\)/,
+  )?.[1];
   assert(target);
-  assert.match(await readSyz({ target, checkLocalSource: false, fetchReproducer: false }, "/tmp", io), /Category:/);
+  assert.match(
+    await readSyz(
+      { target, checkLocalSource: false, fetchReproducer: false },
+      "/tmp",
+      io,
+    ),
+    /Category:/,
+  );
 });

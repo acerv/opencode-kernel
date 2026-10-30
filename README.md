@@ -77,6 +77,11 @@ npm run check
 OPENCODE_SMOKE=1 npm test
 ```
 
+Use `npm run format` to format maintained code and JSON manifests.
+`npm run check` includes `npm run format:check`. Generated files, parser
+fixtures, and documentation are excluded from automatic formatting.
+Code files start with an SPDX MIT license tag and a purpose description.
+
 The smoke test needs OpenCode 2.1.2 on `PATH`. It uses a temporary home
 and configuration directory. It does not call a model or load your
 personal configuration.
